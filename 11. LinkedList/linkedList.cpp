@@ -5,7 +5,7 @@ using namespace std;
 struct Node{
     int data;
     struct Node *next;
-}*first=NULL;
+}*first=NULL,*second=NULL,*third=NULL;
 
 // Function for creating LinkedList
 void create(int A[],int n){
@@ -15,6 +15,22 @@ void create(int A[],int n){
     first->data = A[0];
     first->next = NULL;
     last = first;
+    for(i=1;i<n;i++){
+        t = new Node;
+        t->data = A[i];
+        t->next = NULL;
+        last->next = t;
+        last = t;
+    }
+}
+
+void create2(int A[],int n){
+    int i;
+    struct Node *t,*last;
+    second = new Node;
+    second->data = A[0];
+    second->next = NULL;
+    last = second;
     for(i=1;i<n;i++){
         t = new Node;
         t->data = A[i];
@@ -258,15 +274,71 @@ void reverse(Node *p){
     first = q;
 }
 
+// Function for concatanation
+void Concat(Node *p,Node *q){
+    third = p;
+    while(p->next!=NULL) 
+        p=p->next;
+    p->next = q;
+}
+
+// Merging of two list
+void Merge(Node *p,Node *q){
+    Node *last = NULL;
+    if(p->data<q->data){
+        third=last=p;
+        p=p->next;
+        last->next=NULL;
+    }else{
+        third=last=q;
+        q=q->next;
+        last->next=NULL;
+    }
+    while(p && q){
+        if(p->data<q->data){
+            last->next=p;
+            last=p;
+            p=p->next;
+            last->next=NULL;
+        }else{
+            last->next=q;
+            last=q;
+            q=q->next;
+            last->next=NULL;
+        }
+    }
+    if(p) last->next = p;
+    else last->next = q;
+}
+
+// Function for checking the loop 
+bool checkLoop(Node *p){
+    Node *q,*r;
+    q = r = p;
+    do{
+        q = q->next;
+        r = r->next;
+        r = r!=NULL?r->next:NULL;
+    }while(q && r && r!=q);
+    if(q==r) return true;
+    else return false;
+}
+
 // Driver Code
 int main(){
-    int A[] = {2,3,4,5,7,8,9,10,10,10,10,110,43,43,43,44,78};
-    create(A,17);
-    display(first);
-    cout<<"\n";
-    reverse(first);
-    cout<<endl;
-    display(first);
+    int A[] = {10,23,27,55,200};
+    int B[] = {11,22,33,44,55};
+    Node *p,*q;
+    create(A,5);
+    p = first->next->next;
+    q = first->next->next->next->next;
+    q->next = p;
+    cout<<checkLoop(first);
+
+
+    
+
+
     
     return 0;
 }
